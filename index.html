@@ -40,31 +40,50 @@
         <span id="text"></span>
         <span class="cursor">|</span>
     </div>
-    <script src="words.js"></script>
-    <script>
-        let currentText = "";
-        let word = "";
-        let letterIndex = 0;
 
-        function getRandomWord() {
-            return mysticWords[Math.floor(Math.random() * mysticWords.length)];
+    <script>
+        var subjects = ["The seeker", "The mystic", "Karma", "Dharma", "The soul", "Fate", "Destiny", "The wise one", "The oracle", "The spirit"];
+        var verbs = ["finds", "transcends", "embraces", "rejects", "discovers", "pursues", "seeks", "wanders", "meditates upon", "reveals"];
+        var objects = ["nirvana", "the abyss", "truth", "the cosmic echo", "the sacred path", "the ethereal essence", "the great unknown", "serenity", "the world's heart", "the shadow"];
+        var prepositions = ["in", "through", "beyond", "within", "against", "amidst", "upon", "below"];
+        var locations = ["the void", "eternity", "the chakras", "the ethereal plane", "samsara", "the realms of light", "the cosmic dance", "the river of life", "the mountain's peak"];
+
+        function generateSentence() {
+            var structure = Math.floor(Math.random() * 5);
+
+            switch (structure) {
+                case 0:
+                    return `${randomChoice(subjects)} ${randomChoice(verbs)} ${randomChoice(objects)}.`;
+                case 1:
+                    return `${randomChoice(subjects)} ${randomChoice(verbs)} ${randomChoice(prepositions)} ${randomChoice(locations)}.`;
+                case 2:
+                    return `While ${randomChoice(subjects)} ${randomChoice(verbs)}, ${randomChoice(subjects)} ${randomChoice(verbs)} ${randomChoice(objects)}.`;
+                case 3:
+                    return `${randomChoice(objects)} ${randomChoice(verbs)} ${randomChoice(subjects)} ${randomChoice(prepositions)} ${randomChoice(locations)}.`;
+                case 4:
+                    return `${randomChoice(subjects)} ${randomChoice(prepositions)} ${randomChoice(locations)} ${randomChoice(verbs)} ${randomChoice(objects)}.`;
+            }
         }
 
-        function typeWord() {
-            if (!word) {
-                word = getRandomWord();
-            }
+        function randomChoice(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
 
-            if (letterIndex < word.length) {
-                currentText += word[letterIndex];
+        let currentText = "";
+        let sentence = generateSentence();
+        let letterIndex = 0;
+
+        function typeWord() {
+            if (letterIndex < sentence.length) {
+                currentText += sentence[letterIndex];
                 document.getElementById("text").innerText = currentText;
                 letterIndex++;
-                setTimeout(typeWord, Math.random() * 200 + 50);
+                setTimeout(typeWord, Math.random() * 100 + 50);
             } else {
                 currentText += " ";
-                word = "";
+                sentence = generateSentence();
                 letterIndex = 0;
-                setTimeout(typeWord, Math.random() * 1000 + 500);
+                setTimeout(typeWord, Math.random() * 2000 + 1000);
             }
         }
 
