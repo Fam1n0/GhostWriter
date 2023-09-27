@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mystic Bible Stream</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #222;
+            color: #fff;
+        }
+
+        .typewriter {
+            font-size: 24px;
+        }
+
+        .cursor {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 49% {
+                opacity: 1;
+            }
+            50%, 100% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="typewriter">
+        <span id="text"></span>
+        <span class="cursor">|</span>
+    </div>
+    <script>
+        async function fetchRandomVerse() {
+            const randomBook = Math.floor(Math.random() * 66) + 1;
+            const randomChapter = Math.floor(Math.random() * 150) + 1;
+            let response = await fetch(`https://bible-api.com/${randomBook}.${randomChapter}`);
+            let data = await response.json();
+            const verses = data.verses;
+            const randomVerse = verses[Math.floor(Math.random() * verses.length)];
+            return randomVerse.text;
+        }
+
+        let currentText = "";
+        let verseText = "";
+        let letterIndex = 0;
+
+        async function typeWord() {
+            if (!verseText) {
+                verseText = await fetchRandomVerse();
+            }
+
+            if (letterIndex < verseText.length) {
+                currentText += verseText[letterIndex];
+                document.getElementById("text").innerText = currentText;
+                letterIndex++;
+                setTimeout(typeWord, Math.random() * 200 + 50); 
+            } else {
+                currentText += " ";
+                verseText = ""; // Reset verse for the next fetch
+                letterIndex = 0;
+                setTimeout(typeWord, Math.random() * 1000 + 500); 
+            }
+        }
+
+        typeWord();
+    </script>
+</body>
+
+</html>
