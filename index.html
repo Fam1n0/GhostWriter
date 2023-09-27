@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mystic Bible Stream</title>
+    <title>Mystic Prophecy Stream</title>
     <style>
         body {
             font-family: 'Courier New', monospace;
@@ -40,36 +40,31 @@
         <span id="text"></span>
         <span class="cursor">|</span>
     </div>
+    <script src="words.js"></script>
     <script>
-        async function fetchRandomVerse() {
-            const randomBook = Math.floor(Math.random() * 66) + 1;
-            const randomChapter = Math.floor(Math.random() * 150) + 1;
-            let response = await fetch(`https://bible-api.com/${randomBook}.${randomChapter}`);
-            let data = await response.json();
-            const verses = data.verses;
-            const randomVerse = verses[Math.floor(Math.random() * verses.length)];
-            return randomVerse.text;
-        }
-
         let currentText = "";
-        let verseText = "";
+        let word = "";
         let letterIndex = 0;
 
-        async function typeWord() {
-            if (!verseText) {
-                verseText = await fetchRandomVerse();
+        function getRandomWord() {
+            return mysticWords[Math.floor(Math.random() * mysticWords.length)];
+        }
+
+        function typeWord() {
+            if (!word) {
+                word = getRandomWord();
             }
 
-            if (letterIndex < verseText.length) {
-                currentText += verseText[letterIndex];
+            if (letterIndex < word.length) {
+                currentText += word[letterIndex];
                 document.getElementById("text").innerText = currentText;
                 letterIndex++;
-                setTimeout(typeWord, Math.random() * 200 + 50); 
+                setTimeout(typeWord, Math.random() * 200 + 50);
             } else {
                 currentText += " ";
-                verseText = ""; // Reset verse for the next fetch
+                word = "";
                 letterIndex = 0;
-                setTimeout(typeWord, Math.random() * 1000 + 500); 
+                setTimeout(typeWord, Math.random() * 1000 + 500);
             }
         }
 
